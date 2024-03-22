@@ -2,6 +2,7 @@ package se.ahemddiya.alislam
 
 import android.Manifest
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,15 +63,19 @@ fun AdhanTimingScreen(viewModel: MainActivityViewModel) {
 fun AdhanTimingSuccess(data: AdhanTimingResponse) {
     val listState = rememberLazyListState()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth(),
-        state = listState,
-        contentPadding = PaddingValues(16.dp),
-    ) {
-        items(data.multiDayTimings.first().prayers) { prayer ->
-            Text(text = "${prayer.name} :: ${prayer.time.format()}")
-            Divider(thickness = 1.dp)
+    Column {
+        Text(text = "Time Zone :: ${data.locationInfo.timezone}")
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth(),
+            state = listState,
+            contentPadding = PaddingValues(16.dp),
+        ) {
+            items(data.multiDayTimings.first().prayers) { prayer ->
+                Text(text = "${prayer.name} :: ${prayer.time.format()}")
+                Divider(thickness = 1.dp)
+            }
         }
     }
 
