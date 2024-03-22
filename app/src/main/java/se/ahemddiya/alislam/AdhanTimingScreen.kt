@@ -12,15 +12,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.launch
 import se.ahemddiya.alislam.models.AdhanTimingResponse
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -31,7 +30,6 @@ import java.util.Date
 fun AdhanTimingScreen(viewModel: MainActivityViewModel) {
 
 
-
     val uiState by viewModel.adhanTimings.collectAsStateWithLifecycle()
 
     val permissionState = rememberMultiplePermissionsState(
@@ -39,16 +37,15 @@ fun AdhanTimingScreen(viewModel: MainActivityViewModel) {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
         )
     )
+    LaunchedEffect(Unit) {
+        when {
+            permissionState.allPermissionsGranted -> {
+                viewModel.getLocationBaseAdhanTimings()
+            }
 
-    val scope = rememberCoroutineScope()
-
-    when {
-        permissionState.allPermissionsGranted -> {
-          viewModel.getLocationBaseAdhanTimings()
-        }
-
-        permissionState.shouldShowRationale || (!permissionState.allPermissionsGranted && !permissionState.shouldShowRationale) -> {
-            scope.launch {  permissionState.launchMultiplePermissionRequest()}
+            permissionState.shouldShowRationale || (!permissionState.allPermissionsGranted && !permissionState.shouldShowRationale) -> {
+                permissionState.launchMultiplePermissionRequest()
+            }
         }
     }
 
@@ -80,7 +77,7 @@ fun AdhanTimingSuccess(data: AdhanTimingResponse) {
 }
 
 private fun Long.format(): String {
-   return SimpleDateFormat("MM/dd/yyyy HH:mm").format(Date(this))
+    return SimpleDateFormat("MM/dd/yyyy HH:mm").format(Date(this))
 }
 
 @Composable
