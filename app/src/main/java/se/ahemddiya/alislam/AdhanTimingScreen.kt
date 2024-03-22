@@ -24,6 +24,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import se.ahemddiya.alislam.models.AdhanTimingResponse
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -82,7 +83,7 @@ fun AdhanTimingSuccess(data: AdhanTimingResponse) {
 }
 
 private fun Long.format(): String {
-    return SimpleDateFormat("MM/dd/yyyy HH:mm").format(Date(this))
+    return SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.ENGLISH).format(Date(this))
 }
 
 @Composable

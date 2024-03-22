@@ -1,5 +1,6 @@
 package se.ahemddiya.alislam
 
+import android.annotation.SuppressLint
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,6 +28,7 @@ class MainActivityViewModel @Inject constructor(
         fetchAdhanTiming()
     }
 
+    @SuppressLint("MissingPermission")
     fun getLocationBaseAdhanTimings() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
             fetchAdhanTiming(it)
